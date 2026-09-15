@@ -4,7 +4,6 @@ from importlib import metadata as importlib_metadata
 from typing import Any, Dict, Iterable, List, Optional
 
 from seek_cli.plugins.api import PluginError, SeekPlugin, validate_plugin
-from seek_cli.plugins.alibaba import AlibabaPlugin
 
 
 ENTRY_POINT_GROUP = "seek.plugins"
@@ -33,7 +32,6 @@ class PluginRegistry:
         if self._discovered:
             return self
         self._discovered = True
-        self.register(AlibabaPlugin())
         for entry_point in _entry_points():
             try:
                 loaded = entry_point.load()

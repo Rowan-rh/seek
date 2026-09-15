@@ -26,20 +26,11 @@ def read_version() -> str:
 setup(
     name="seek-cli",
     version=read_version(),
-    description="AI agent troubleshooting orchestration CLI — for agent use, not humans",
+    description="Generic Agent investigation orchestration CLI",
     author="seek",
     python_requires=">=3.8",
     packages=find_packages(),
-    install_requires=[
-        "requests>=2.20.0",
-    ],
-    extras_require={
-        # Alibaba Provider 的 SLS 能力按需安装；基础 seek 不绑定具体云厂商。
-        "alibaba": ["aliyun-log-python-sdk>=0.9.0"],
-        # 本地直连数据库（seek db --conn），日常/预发环境可选能力
-        "mysql": ["PyMySQL>=1.1"],
-        "all": ["aliyun-log-python-sdk>=0.9.0", "PyMySQL>=1.1"],
-    },
+    install_requires=[],
     entry_points={
         "console_scripts": [
             "seek=seek_cli.cli:main",

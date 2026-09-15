@@ -1,7 +1,7 @@
 """通用插件和 Provider 协议。
 
-这里不定义任何阿里、AWS 或 Kubernetes 类型。插件只需要声明自己的能力，
-并通过 ``service`` 暴露具体实现；Chain 引擎和 CLI 不应直接依赖厂商 SDK。
+插件只需要声明自己的能力，并通过 ``service`` 暴露具体实现；Chain 引擎和 CLI
+不应直接依赖 Provider SDK。
 """
 
 from dataclasses import dataclass

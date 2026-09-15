@@ -1,8 +1,8 @@
-"""性能日志 — 记录 CLI 命令与集成 IO 的耗时，供排查会话慢点归因
+"""性能日志 — 记录 CLI 命令与插件 IO 的耗时，供排查会话慢点归因
 
 日志文件: ~/.seek/logs/perf.jsonl (每行一个 JSON)
 每条记录: {timestamp, command, span, status, duration_ms, session_id?, detail}
-- span: command(命令级) | sls_query | a1_subprocess | dms_call(集成 IO 级)
+- span: command(命令级) | plugin_io(插件 IO 级)
 - session_id: 环境变量 SEEK_SESSION_ID 存在时附带，用于把命令耗时归属到 chain 会话步骤
 
 开关: seek config set options.perf_log false 可关闭（未设置默认开启）。
@@ -63,8 +63,8 @@ def log_perf(command: str, span: str, duration_ms, status: str = "success",
     """记录一条耗时日志；任何失败静默吞掉，绝不影响命令执行。
 
     Args:
-        command: 命令名（如 "sls query"）或集成动作描述（如 "sls p/l"）
-        span: 层级标识 command | sls_query | a1_subprocess | dms_call
+        command: 命令名或插件动作描述
+        span: 层级标识 command | plugin_io
         duration_ms: 耗时毫秒（time.perf_counter 单调钟差值）
         status: success | error
         detail: 可选明细（自动脱敏与截断）
@@ -118,7 +118,7 @@ def read_perf_records(time_range: str = "24h", keyword: str = "",
     """读取窗口内符合条件的 perf 记录。
 
     Args:
-        time_range: 时间窗（与 SLS --time 同语法：24h/7d、from,to、人类可读区间）
+        time_range: 时间窗（24h/7d、from,to、人类可读区间）
         keyword: 记录 command 字段的子串过滤（大小写不敏感，空为不过滤；
             同时作用于 command 名与 IO 动作描述）
         session: session_id 精确匹配（空为不过滤）
@@ -130,10 +130,8 @@ def read_perf_records(time_range: str = "24h", keyword: str = "",
     Raises:
         ValueError: time_range 语法非法。
     """
-    from seek_cli.plugins import get_provider
-    sls_client = get_provider("alibaba").service("sls")
-
-    from_t, to_t = sls_client.parse_time_range(time_range)
+    from seek_cli.time_range import parse_time_range
+    from_t, to_t = parse_time_range(time_range)
     keyword_kw = (keyword or "").strip().lower()
     session_kw = (session or "").strip()
     records = []

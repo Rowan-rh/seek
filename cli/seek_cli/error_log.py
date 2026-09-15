@@ -48,8 +48,8 @@ def log_error(command: str, error_code: str, error_message: str,
     """记录一条错误日志
 
     Args:
-        command: 出错的命令（如 "deploy env"）
-        error_code: 错误码（如 A1_CLI_ERROR, DMS_ERROR）
+        command: 出错的命令或插件动作
+        error_code: 稳定的错误码
         error_message: 错误消息
         args: 相关参数
         context: 额外上下文

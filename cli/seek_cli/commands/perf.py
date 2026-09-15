@@ -45,8 +45,8 @@ def _build_hint(totals: dict, has_command_records: bool) -> str:
                 "(--time 7d 可扩大)。")
     share = totals["ioSharePct"]
     if share >= 60:
-        direction = (f"集成 IO 占命令耗时 {share}%（高）——优先考虑 IO 并行"
-                     "（跨 logstore 并行查询）与 DMS MCP server 常驻复用")
+        direction = (f"插件 IO 占命令耗时 {share}%（高）——优先考虑并行查询"
+                     "与连接复用")
     elif share <= 25:
         direction = (f"集成 IO 占命令耗时 {share}%（低）——耗时主要在 LLM/编排轮次，"
                      "优先命令批量化（单次调用承载更多查询）")
@@ -66,10 +66,6 @@ def cmd_perf_report(args) -> dict:
             time_range=time_range, keyword=keyword, session=session)
     except ValueError as e:
         return error(f"invalid --time: {e}", code="BAD_ARGUMENT")
-
-    from seek_cli.plugins import get_provider
-    sls_client = get_provider("alibaba").service("sls")
-    from_t, to_t = sls_client.parse_time_range(time_range)
 
     command_groups = {}   # command 名 -> {"durations": [], "errors": n}
     io_groups = {}        # (span, command) -> 同上

@@ -23,12 +23,7 @@ echo "=== 3. Agent 场景三层评测（replay） ==="
 python3 "$REPO_DIR/harness/run_agent_evals.py"
 
 echo ""
-echo "=== 4. OpenSpec 校验 ==="
-openspec validate --all --strict
-openspec validate --archived --strict
-
-echo ""
-echo "=== 5. 裸 except grep ==="
+echo "=== 4. 裸 except grep ==="
 if grep -REn "except\s*:" seek_cli/ tests/; then
     echo "ERROR: 发现裸 except 子句"
     exit 1

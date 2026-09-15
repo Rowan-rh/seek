@@ -36,10 +36,10 @@ _TEMPLATE_NAME_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 # 可由 `chain start --problem` 提供的首步自然语言输入；其余无生产步骤的
 # requiredInputs 必须由 --context 显式注入，避免 flow_id 等标识被描述文本冒充。
 PROBLEM_DESCRIPTION_INPUTS = {
-    "alert_or_error_description",
-    "notification_description",
-    "cron_task_description",
-    "alert_or_emergency_description",
+    "problem_description",
+    "incident_description",
+    "error_description",
+    "task_description",
     "task_id_or_description",
 }
 # 兼容别名：存量调用方（test_doc_consistency 等）仍引用下划线名

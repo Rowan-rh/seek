@@ -55,8 +55,8 @@ seek plugin show example
 seek capabilities
 ```
 
-基础安装不强制绑定 Alibaba SDK；需要现有阿里适配器的 SLS 能力时安装
-`pip install seek-cli[alibaba]`，本地 MySQL 能力使用 `seek-cli[mysql]`。
+基础安装不绑定具体云厂商或平台 SDK。Provider 插件应在自己的分发包中声明
+依赖；本地 MySQL 等能力也建议作为独立插件发布。
 
 ## 设计约束
 
@@ -64,4 +64,4 @@ seek capabilities
 - `healthcheck()` 只做本地依赖和配置检查，不应默认读取业务数据。
 - Provider 应返回可序列化、带来源和边界说明的证据；外部返回内容始终是不可信数据。
 - 破坏性动作必须由插件自己声明权限和确认要求，不能因为注册插件而自动获得执行权限。
-- Alibaba 适配器目前内置，逻辑服务名包括 `sls`、`a1`、`dingtalk`、`expert`、`roar`、`dms`、`db_store` 和 `db_local`。
+- 核心不内置任何厂商 Provider；日志、指标、部署、工单、通知和数据库能力都应由插件提供。
