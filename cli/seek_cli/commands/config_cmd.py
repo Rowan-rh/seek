@@ -9,9 +9,14 @@ from pathlib import Path
 
 from seek_cli import settings
 from seek_cli import config as seek_config
-from seek_cli.integrations import expert_client, roar_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
 from seek_cli.paths import seek_home, seek_home_source
+
+
+_alibaba = get_provider("alibaba")
+expert_client = _alibaba.service("expert")
+roar_client = _alibaba.service("roar")
 
 # show 时各配置项的环境变量与旧文件来源（用于标注生效来源）
 _ENV_KEYS = {

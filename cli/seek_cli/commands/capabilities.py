@@ -25,6 +25,15 @@ def cmd_capabilities(args) -> dict:
                 "subcommands": [],
                 "args": [{"name": "--format", "choices": ["json", "text"], "default": "json"}],
             },
+            "plugin": {
+                "description": "插件与 Provider 管理 — 发现内置和第三方 seek.plugins 插件",
+                "subcommands": [
+                    {"name": "list", "description": "列出已发现的插件和 Provider", "args": []},
+                    {"name": "show", "description": "查看插件元数据和本地健康检查", "args": [
+                        {"name": "name", "required": True, "help": "插件 ID，例如 alibaba"},
+                    ]},
+                ],
+            },
             "project": {
                 "description": "项目管理 — 列出/查看/添加项目配置",
                 "subcommands": [
@@ -320,6 +329,7 @@ def cmd_capabilities(args) -> dict:
             },
         },
         "chains": [],
+        "plugins": [],
         "data_contracts": {
             "evidence": chain_engine.EVIDENCE_SCHEMA,
             "token_usage": {
@@ -351,6 +361,13 @@ def cmd_capabilities(args) -> dict:
         capabilities["chains"] = chain_engine.list_chains()
     except chain_engine.ChainConfigError as exc:
         return error(str(exc), code="CHAIN_CONFIG_ERROR")
+    from seek_cli.plugins import get_registry
+    registry = get_registry()
+    capabilities["plugins"] = registry.as_dicts()
+    capabilities["plugin_load_errors"] = registry.load_errors()
+    for plugin in registry.plugins():
+        for command_name, command_spec in plugin.command_capabilities().items():
+            capabilities["commands"].setdefault(command_name, command_spec)
     return success(capabilities, message="seek CLI 能力清单")
 
 

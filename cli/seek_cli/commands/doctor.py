@@ -22,7 +22,8 @@ def _live_check(endpoint: str, project: str, logstore: str) -> dict:
         {"status": "ok"|"not_found"|"error"|"skipped", "detail": str}
     """
     try:
-        from seek_cli.integrations import sls_client
+        from seek_cli.plugins import get_provider
+        sls_client = get_provider("alibaba").service("sls")
         if not sls_client.SDK_AVAILABLE:
             return {"status": "skipped", "detail": "aliyun-log-python-sdk 未安装"}
         client = sls_client.get_log_client(endpoint)
@@ -61,7 +62,8 @@ def _liveness_check(endpoint: str, project: str, logstore: str, window: str) -> 
         {"status": "active"|"stale"|"skipped"|"error", "count": int|None, "detail": str}
     """
     try:
-        from seek_cli.integrations import sls_client
+        from seek_cli.plugins import get_provider
+        sls_client = get_provider("alibaba").service("sls")
         if not sls_client.SDK_AVAILABLE:
             return {"status": "skipped", "count": None,
                     "detail": "aliyun-log-python-sdk 未安装，跳过活性检查"}
@@ -93,7 +95,8 @@ def _db_conn_checks(live: bool) -> list:
     连通失败记 warn、驱动缺失记 skipped，均不计入 issues/skipped 计数，
     避免 db 直连（日常环境可选能力）阻断整体体检。
     """
-    from seek_cli.integrations import db_store
+    from seek_cli.plugins import get_provider
+    db_store = get_provider("alibaba").service("db_store")
     checks = []
     try:
         conns = db_store.load_connections()
@@ -118,7 +121,7 @@ def _db_conn_checks(live: bool) -> list:
             entry.update(status="structure_ok", detail="结构完整（未实测连通性）")
             checks.append(entry)
             continue
-        from seek_cli.integrations import db_local
+        db_local = get_provider("alibaba").service("db_local")
         client = db_local.open_client(name, profile)
         try:
             client.test()
@@ -142,7 +145,8 @@ def cmd_doctor(args) -> dict:
     live = not getattr(args, "no_live", False)
     liveness_window = (getattr(args, "liveness_window", "") or "").strip()
     if liveness_window:
-        from seek_cli.integrations import sls_client
+        from seek_cli.plugins import get_provider
+        sls_client = get_provider("alibaba").service("sls")
         try:
             sls_client.parse_time_range(liveness_window)
         except ValueError as e:

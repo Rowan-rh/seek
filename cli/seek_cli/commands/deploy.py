@@ -1,8 +1,12 @@
 """部署信息查询命令 — 通过 A1 CLI 查询部署分支、变更记录等"""
 
 from seek_cli import config
-from seek_cli.integrations import a1_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
+
+
+# 兼容旧命令实现，同时把具体集成收口到 Provider 边界。
+a1_client = get_provider("alibaba").service("a1")
 
 
 _UNCONFIGURED_PROJECT_HINT = (

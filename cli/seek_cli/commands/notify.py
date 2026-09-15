@@ -4,8 +4,11 @@
 并内置 deliveryState 状态码与运营商回执错误码的中文解读。
 """
 
-from seek_cli.integrations import roar_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
+
+
+roar_client = get_provider("alibaba").service("roar")
 
 # 通知中心内部投递状态码（deliveryState）
 DELIVERY_STATE_MAP = {

@@ -80,7 +80,7 @@ import warnings
 warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 from seek_cli.output import print_result, success, error
-from seek_cli.commands import project, deploy, sls, trace, chain, dingtalk, ticket, capabilities, db, skill, version_cmd, doctor, notify, config_cmd, perf, harness, init_cmd
+from seek_cli.commands import project, deploy, sls, trace, chain, dingtalk, ticket, capabilities, db, skill, version_cmd, doctor, notify, config_cmd, perf, harness, init_cmd, plugin as plugin_cmd
 from seek_cli import error_log
 from seek_cli import perf_log
 from seek_cli import config
@@ -123,6 +123,20 @@ def _build_parser() -> argparse.ArgumentParser:
     cap = sub.add_parser("capabilities", help="输出所有命令的能力清单(JSON schema)")
     _add_global_args(cap)
     cap.set_defaults(func=capabilities.cmd_capabilities)
+
+    # ── plugin (插件发现) ──
+    plugin = sub.add_parser("plugin", help="插件与 Provider 管理")
+    plugin_sub = plugin.add_subparsers(dest="subcommand", required=True)
+    _add_global_args(plugin)
+
+    plugin_list = plugin_sub.add_parser("list", help="列出已发现的插件和 Provider")
+    _add_global_args(plugin_list)
+    plugin_list.set_defaults(func=plugin_cmd.cmd_plugin_list)
+
+    plugin_show = plugin_sub.add_parser("show", help="查看插件元数据和本地健康检查")
+    plugin_show.add_argument("name", help="插件 ID，例如 alibaba")
+    _add_global_args(plugin_show)
+    plugin_show.set_defaults(func=plugin_cmd.cmd_plugin_show)
 
     # ── version (版本) ──
     ver = sub.add_parser("version", help="输出版本和变更记录")
@@ -679,6 +693,10 @@ def _build_parser() -> argparse.ArgumentParser:
     sk_uninstall.add_argument("--dir", help="自定义 skills 目录")
     _add_global_args(sk_uninstall)
     sk_uninstall.set_defaults(func=skill.cmd_skill_uninstall)
+
+    # 第三方插件可以在不修改核心 CLI 的情况下增加命令组。
+    from seek_cli.plugins import get_registry
+    get_registry().register_cli(sub)
 
     return parser
 

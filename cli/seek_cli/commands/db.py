@@ -6,9 +6,15 @@
 import atexit
 import re
 
-from seek_cli.integrations import dms_client, db_store, db_local
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
 from seek_cli.settings import mask_secret
+
+
+_alibaba = get_provider("alibaba")
+dms_client = _alibaba.service("dms")
+db_store = _alibaba.service("db_store")
+db_local = _alibaba.service("db_local")
 
 # 本地直连结果行数限制
 _DEFAULT_MAX_ROWS = 500

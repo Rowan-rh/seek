@@ -1,7 +1,7 @@
 ---
 name: seek
 skill_doc_version: 0.12.0   # 本 SKILL.md 文件迭代版本
-cli_version_ref: 0.10.2     # 配套 seek CLI 二进制版本（实际见 `seek version`）
+cli_version_ref: 0.11.0     # 配套 seek CLI 二进制版本（实际见 `seek version`）
 description: Troubleshooting orchestration CLI — queries deploy info, SLS logs, traces, DingTalk chat, and cloud-network tickets. Must be invoked only via the explicit /seek command, never triggered automatically.
 description_zh: 排查编排工具，供 AI agent 调用的命令行工具，仅通过 /seek 显式调用，命中排查场景时强制使用链路引擎逐步执行，禁止跳步
 user-invocable: true

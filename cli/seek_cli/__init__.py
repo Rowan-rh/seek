@@ -9,10 +9,15 @@
 - 编排和约束排查链路
 """
 
-__version__ = "0.10.2"
+__version__ = "0.11.0"
 
 # 版本变更记录（最新在前）
 CHANGELOG = {
+    "0.11.0": [
+        "feat: 引入 seek.plugins 插件发现机制与 Provider 元数据协议",
+        "feat: 现有 Alibaba 集成通过内置 Provider 适配器提供，命令行为保持兼容",
+        "feat: 新增 seek plugin list/show，支持第三方插件能力发现与本地健康检查",
+    ],
     "0.10.2": [
         "fix: chain status/step/validate/context/report/usage 六命令统一会话异常映射 — 非法 session_id 返回 BAD_ARGUMENT(原冒泡误报 INTERNAL_ERROR)、损坏会话返回 CHAIN_CONFIG_ERROR 并保留路径级诊断(原被 except ValueError 吞成 NOT_FOUND)",
         "fix: 会话与模板路径安全加固 — session_id 强制 12 位小写 hex、reportTemplate 强制安全单文件名；get_session/_session_lock/_write_session_file 与 get_report_template 前置校验，拒绝路径型 id 与目录穿越",

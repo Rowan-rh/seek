@@ -7,9 +7,14 @@ from pathlib import Path
 
 from seek_cli import __version__, agent_eval, chain, config
 from seek_cli.commands import skill
-from seek_cli.integrations import expert_client, roar_client
 from seek_cli.output import error, success
+from seek_cli.plugins import get_provider
 from seek_cli.paths import seek_home, seek_home_source
+
+
+_alibaba = get_provider("alibaba")
+expert_client = _alibaba.service("expert")
+roar_client = _alibaba.service("roar")
 
 
 def _check(name: str, status: str, message: str, data=None) -> dict:

@@ -6,8 +6,14 @@ import shutil
 import subprocess
 from pathlib import Path
 from seek_cli import settings
-from seek_cli.integrations import a1_client, dms_client, sls_client
 from seek_cli.output import success
+from seek_cli.plugins import get_provider
+
+
+_alibaba = get_provider("alibaba")
+a1_client = _alibaba.service("a1")
+dms_client = _alibaba.service("dms")
+sls_client = _alibaba.service("sls")
 
 DMS_MCP_GUIDE_URL = dms_client.DMS_MCP_GUIDE_URL
 A1_CLI_GUIDE_URL = a1_client.A1_CLI_GUIDE_URL

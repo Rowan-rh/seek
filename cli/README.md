@@ -8,7 +8,8 @@
 2. **流程编排约束** — 通过排查链路引擎约束 agent 按步骤执行
 3. **集成能力** — 封装 A1 CLI、aliyun-log SDK、dws CLI、qt-expert API
 4. **零交互** — 所有参数通过命令行传入，不等待用户输入
-5. **自发现** — `seek capabilities` 一条命令输出全部能力清单
+5. **插件化** — 厂商和平台集成通过 Provider 插件发现，不侵入 Chain 核心
+6. **自发现** — `seek capabilities` 一条命令输出全部能力清单
 
 ## 安装
 
@@ -16,6 +17,9 @@
 cd cli
 pip install -e .
 ```
+
+基础安装不绑定具体云厂商；需要现有 Alibaba SLS 适配器时安装
+`pip install -e '.[alibaba]'`，需要本地 MySQL 直连时安装 `.[mysql]`。
 
 安装后可用 `seek` 或 `python -m seek_cli` 调用。
 
@@ -54,6 +58,7 @@ bash run_checks.sh
 | 命令组 | 说明 | 集成 |
 |--------|------|------|
 | `capabilities` | 输出所有命令能力清单(JSON schema) | 内置 |
+| `plugin` | 插件与 Provider 列表、元数据和本地健康检查 | 内置 + entry points |
 | `init` | 检查并引导配置 A1 CLI、DMS MCP、SLS AK/SK | 内置 |
 | `harness` | Agent Harness 离线就绪检查 | 内置 |
 | `project` | 项目配置管理 | 内置 JSON |

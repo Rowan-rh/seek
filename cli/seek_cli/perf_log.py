@@ -130,7 +130,8 @@ def read_perf_records(time_range: str = "24h", keyword: str = "",
     Raises:
         ValueError: time_range 语法非法。
     """
-    from seek_cli.integrations import sls_client
+    from seek_cli.plugins import get_provider
+    sls_client = get_provider("alibaba").service("sls")
 
     from_t, to_t = sls_client.parse_time_range(time_range)
     keyword_kw = (keyword or "").strip().lower()

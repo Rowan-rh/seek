@@ -1,6 +1,6 @@
 # seek — 排查编排 CLI
 
-AI agent 调用的命令行工具，覆盖部署查询、日志查询、调用链路、钉钉通信、工单分析和排查流程编排。
+面向 AI agent 的证据驱动故障排查与事件响应编排工具。核心通过 Provider 插件接入部署、日志、链路、工单、数据库和通知系统。
 
 ## 安装
 
@@ -9,6 +9,8 @@ cd cli
 pip3 install -e .
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 ```
+
+需要 Alibaba SLS 或本地 MySQL 能力时，再安装 `pip3 install -e '.[alibaba,mysql]'`。
 
 ## 首次初始化
 
@@ -32,6 +34,18 @@ seek init
 ln -s "$(pwd)" ~/.qoder/skills/seek
 ```
 
+## Provider 插件
+
+核心 Chain、证据、会话和报告不依赖具体厂商。现有阿里集成由内置 Alibaba Provider 提供；第三方插件通过 `seek.plugins` entry point 自动发现，不需要修改核心 CLI。
+
+```bash
+seek plugin list
+seek plugin show alibaba
+seek capabilities
+```
+
+插件开发协议和示例见 [`PLUGIN.md`](PLUGIN.md)。
+
 ## 目录结构
 
 ```
@@ -49,6 +63,7 @@ seek/
 │   │   ├── output.py       # 输出格式化
 │   │   ├── commands/       # 命令实现
 │   │   ├── integrations/   # 外部集成
+│   │   ├── plugins/         # 插件协议、发现和 Provider 适配器
 │   │   └── resources/      # 运行时权威副本（setup.py 只打包这里，代码只读这里）
 │   │       ├── config/
 │   │       │   └── projects.json     # 项目配置
@@ -71,6 +86,7 @@ seek/
 | 命令 | 用途 | 集成 |
 |------|------|------|
 | `seek capabilities` | 输出所有命令能力清单 | 内置 |
+| `seek plugin` | 插件与 Provider 发现/健康检查 | 内置 + entry points |
 | `seek init` | 检查并引导配置 A1 CLI、DMS MCP、SLS 凭据 | 内置 |
 | `seek version` | 版本与 CHANGELOG | 内置 |
 | `seek project` | 项目配置管理 | 内置 |
@@ -117,15 +133,17 @@ python3 scripts/seek_tmp.py create --slug review-cli-output
 
 `.seek-tmp/` 已整体忽略。需要提交或交付的正式产物必须从 `outputs/` 移至仓库约定目录。该目录不替代 `${SEEK_HOME:-~/.seek}`、系统临时目录，或原子写时与目标文件同目录的 `.filename-*.tmp`。完整规则见 [`AGENT.md`](AGENT.md)。
 
-## 集成
+## Provider 集成
 
-| 集成 | 类型 | 认证 | 命令 |
+| Provider/集成 | 类型 | 认证 | 命令 |
 |------|------|------|------|
 | A1 CLI | subprocess | `a1 auth login`（[指南](https://a1.io.alibaba-inc.com/docs/guide/)） | deploy |
 | aliyun-log SDK | Python SDK | `~/.aliyun/config.json` | sls, trace |
 | dws CLI | subprocess | QoderWork 内置 | dingtalk |
 | qt-expert API | HTTP | 无需(内网) | ticket |
 | DMS MCP | stdio JSON-RPC | `~/.qoderwork/mcp.json`（[指南](https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myCZYKkoYkWgN7R35y)） | db |
+
+运行时安装了哪些 Provider，以 `seek plugin list` 和 `seek capabilities` 为准。
 
 ## Agent 接入
 

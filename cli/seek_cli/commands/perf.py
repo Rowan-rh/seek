@@ -67,7 +67,8 @@ def cmd_perf_report(args) -> dict:
     except ValueError as e:
         return error(f"invalid --time: {e}", code="BAD_ARGUMENT")
 
-    from seek_cli.integrations import sls_client
+    from seek_cli.plugins import get_provider
+    sls_client = get_provider("alibaba").service("sls")
     from_t, to_t = sls_client.parse_time_range(time_range)
 
     command_groups = {}   # command 名 -> {"durations": [], "errors": n}

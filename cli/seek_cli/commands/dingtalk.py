@@ -1,7 +1,10 @@
 """钉钉命令 — 群聊搜索/消息查询/消息发送/通讯录/文档"""
 
-from seek_cli.integrations import dingtalk_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
+
+
+dingtalk_client = get_provider("alibaba").service("dingtalk")
 
 
 def _extract_result(data, *keys, default=None):

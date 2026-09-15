@@ -7,7 +7,7 @@
 | **前置输入** | 现象描述（必填）；工单类需 `flowId`；富化类需 `alert_uuid_or_endpoint` |
 | **证据来源** | `seek deploy` / `sls` / `trace` / `db` / `ticket` / `notify` / `dingtalk`，以及链路会话文件 `~/.seek/sessions/<session_id>.json` |
 | **结论边界** | 本 SOP 只规范"怎么作业"，不替代场景知识；具体取证口径见 [`evidence-and-boundaries.md`](evidence-and-boundaries.md) 与 [`investigation-patterns.md`](investigation-patterns.md) |
-| **校验时间 / 版本** | 2026-09-11 回归校验；seek CLI `0.10.1`、SKILL.md `0.12.0`、链路定义 `cli/seek_cli/resources/chains/default.json` |
+| **校验时间 / 版本** | 2026-09-15 回归校验；seek CLI `0.11.0`、SKILL.md `0.12.0`、链路定义 `cli/seek_cli/resources/chains/default.json` |
 | **关联文档** | [`../SKILL.md`](../SKILL.md)（契约原文）、[`command-reference.md`](command-reference.md)（命令参数）、[`../cli/TROUBLESHOOTING.md`](../cli/TROUBLESHOOTING.md)（按症状排错） |
 
 ---

@@ -3,8 +3,11 @@
 from pathlib import Path
 
 from seek_cli import config
-from seek_cli.integrations import sls_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
+
+
+sls_client = get_provider("alibaba").service("sls")
 
 # 工作区根目录
 _WORKSPACE = Path(__file__).parent.parent.parent.parent.parent

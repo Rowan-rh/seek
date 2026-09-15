@@ -1,7 +1,10 @@
 """云网络工单查询命令 — 封装 qt-expert API"""
 
-from seek_cli.integrations import expert_client
 from seek_cli.output import success, error
+from seek_cli.plugins import get_provider
+
+
+expert_client = get_provider("alibaba").service("expert")
 
 
 def cmd_ticket_search(args) -> dict:
