@@ -1,0 +1,44 @@
+# Repository-local temporary artifacts
+/.seek-tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sensitive (never commit credentials)
+credentials.json
+*.pem
+*.key
+.env*
+
+# User-level config (if symlinked)
+.seek/
+.zcode/
+
+# Local agent/session artifacts
+.qoder/
+vibe_images/
+openspec/changes/archive/

@@ -1,0 +1,573 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-09-08T00:00:00+08:00",
+  "projects": {
+    "qt-stability": {
+      "description": "QT稳定性平台 - 告警富化核心(13+ Processor)，同时是应急链路的告警事件源",
+      "repoPath": "",
+      "a1AppName": "qt-stability",
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-生产-告警事件源",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-stability-cn-hangzhou",
+                "logstore": "stability-monitor-event",
+                "indexHint": "应急链路上游告警事件源(生产)。日常/演练对应 qt-monitor-cn-beijing/yanlian_qt_stability_event_source，见 daily 环境"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-生产-应用日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt_stability_server_log_prod"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-生产-标准事件",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt-stability-event"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-生产-处理过程",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt-stability-event-process"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "daily": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-日常/演练-告警事件源",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "yanlian_qt_stability_event_source",
+                "indexHint": "应急链路上游告警事件源(日常/演练)，logstore 名带 yanlian 前缀但承载日常告警。生产对应 qt-stability-cn-hangzhou/stability-monitor-event"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-日常-标准事件",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt-stability-event-daily"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-日常-处理过程",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt-stability-event-process-daily"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "publish_aso": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS上海-预发ASO-应用日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt-stability_server_log_publish_aso"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100
+          }
+        }
+      }
+    },
+    "qt-monitor-ops": {
+      "description": "QT监控运维平台 - 通知/告警/值班",
+      "repoPath": "",
+      "a1AppName": "qt-monitor-data",
+      "environments": {
+        "daily": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-日常",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-monitor-ops-cn-hangzhou",
+                "logstore": "qt_monitor_ops_log_daily"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-生产",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-monitor-ops-cn-hangzhou",
+                "logstore": "qt_monitor_ops_log_online"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    },
+    "qt-expert": {
+      "description": "QT专家系统 - 实例拓扑查询/云网络工单。无可用 SLS 应用日志源，取证走 ticket 命令或本地仓库代码",
+      "repoPath": "",
+      "a1AppName": "qt-expert",
+      "environments": {}
+    },
+    "qt-change-planning": {
+      "description": "QT变更编排服务 - 变更计划与状态同步",
+      "repoPath": "",
+      "a1AppName": "qt-change-planning",
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-生产-变更编排",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-changeplatform",
+                "logstore": "qt-change-planning-production"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    },
+    "notice-service": {
+      "description": "通知中心 - 钉钉/短信/电话/邮件多渠道分发",
+      "repoPath": "",
+      "a1AppName": "qt-notice-service",
+      "environments": {}
+    },
+    "stability-monitor": {
+      "description": "稳定性监控 - 告警管理/数据同步/容量基线",
+      "repoPath": "",
+      "a1AppName": "stability-monitor",
+      "environments": {
+        "pre": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS上海-预发ASO-应用日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "stability_monitor_server_log_pre_aso",
+                "indexHint": "实测索引形态: 有全文索引且 message/level/location/thread/time 均为索引字段，但分词对驼峰类名(如 MetricSyncTask)与中文长词不生效，关键词搜索会静默返 0 条。检索此类词必须用 SQL 全扫描: * | select ... where message like '%关键词%'，或改用日志中实际出现的短词/业务词"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100
+          }
+        },
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS上海-生产ASO-应用日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "stability_monitor_server_log_publish_aso",
+                "indexHint": "实测索引形态: 有全文索引且 message/level/location/thread/time 均为索引字段，但分词对驼峰类名(如 MetricSyncTask)与中文长词不生效，关键词搜索会静默返 0 条。检索此类词必须用 SQL 全扫描: * | select ... where message like '%关键词%'，或改用日志中实际出现的短词/业务词"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100
+          }
+        }
+      }
+    },
+    "qt-diagnosis": {
+      "description": "诊断服务 - 一键网络诊断/任务执行/变更关联",
+      "repoPath": "",
+      "a1AppName": "qt-diagnosis",
+      "environments": {}
+    },
+    "qt-metric": {
+      "description": "指标服务 - 指标采集分析/异常检测/智能基线",
+      "repoPath": "",
+      "a1AppName": "qt-metric",
+      "environments": {}
+    },
+    "qt-netbrain": {
+      "description": "网络大脑 - 监控拓扑分析/异常检测/告警生成",
+      "repoPath": "",
+      "a1AppName": "qt-netbrain",
+      "environments": {}
+    },
+    "qt-piupiu": {
+      "description": "网络产品运维 - OM任务/SLS消费/资源同步",
+      "repoPath": "",
+      "a1AppName": "qt-piupiu",
+      "environments": {}
+    },
+    "qt-operation": {
+      "description": "运维管理 - 定时任务/监控告警/日志追踪",
+      "repoPath": "",
+      "a1AppName": "qt-operation",
+      "environments": {}
+    },
+    "stability-agent-master": {
+      "description": "应急响应Agent主控 - 下发任务/接收任务状态变更/维护ag健康",
+      "repoPath": "",
+      "a1AppName": "stability-agent-master",
+      "envAliases": {
+        "daily": "yanlian"
+      },
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-生产-Agent主控任务日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "stability_agent_master_prod",
+                "indexHint": "预发与生产共用该 logstore（Master 本身就是共享部署）。命中日志不能直接当作生产证据，需用 relative_process_uuid 回溯任务来源环境"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "yanlian": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-演练-Agent主控事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "stability_agent_master_yanlian",
+                "indexHint": "仅演练环境。预发/生产均写入 prod 环境的 stability_agent_master_prod"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    },
+    "stability-handle": {
+      "description": "应急处理执行(仅1.0涉及) - 下发变更任务/重试/逃逸日志",
+      "repoPath": "",
+      "a1AppName": "stability-handle",
+      "envAliases": {
+        "daily": "yanlian"
+      },
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-生产-处理事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_handle_event_prod"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-生产-逃逸处理日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt_handle_escape_sls_prod"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-生产-处理重试日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt_stability_handle_retry_log_prod"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "pre": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-预发-处理事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_handle_event_pre",
+                "indexHint": "预发仅有独立的事件 logstore；重试与逃逸日志与生产共享，需到 prod 环境查"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "yanlian": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-演练-处理事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_handle_event_yanlian"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-演练-处理重试日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt_stability_handle_retry_log_yanlian",
+                "indexHint": "2026-08-21 实测近 30d 零日志(stale)，logstore 存在但已停写。在此查不到不能当作“演练未重试”的证据，需改查 prod 环境的 qt_stability_handle_retry_log_prod"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS上海-演练-逃逸处理日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-shanghai-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-shanghai",
+                "logstore": "qt_handle_escape_sls_yanlian"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    },
+    "stability-locate": {
+      "description": "应急响应核心应用 - 主链路/逃逸决策/容灾中心/定位任务(POP API)",
+      "repoPath": "",
+      "a1AppName": "stability-locate",
+      "envAliases": {
+        "daily": "yanlian"
+      },
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-生产-定位事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_locate_event_prod"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS杭州-生产-应急中间Logstore",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-nfv-recovering-center",
+                "logstore": "stability-locate-event",
+                "indexHint": "双级 SLS 入口的第二级：Transit Worker 从上游告警事件源转写到此，主 Consumer 从此消费。上游有、此处无 => 停在 Transit；此处有、无业务对象 => 停在主 Consumer"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "pre": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-预发-定位事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_locate_event_pre"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "yanlian": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS北京-演练-定位事件日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-beijing-share.log.aliyuncs.com",
+                "project": "qt-monitor-cn-beijing",
+                "logstore": "qt_stability_locate_event_yanlian",
+                "indexHint": "yanlian 是应急链路唯一有双 Worker 启动实证的非生产环境；daily/pre 不启动 SLS Worker"
+              }
+            },
+            {
+              "type": "sls",
+              "name": "SLS杭州-演练-应急中间Logstore",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-nfv-recovering-center",
+                "logstore": "stability-locate-event-test",
+                "indexHint": "双级 SLS 入口的第二级(日常/演练)。两段 ConsumerGroup 同名也因 Project/Logstore 不同而独立，checkpoint 不共享"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    },
+    "qt-scheduler-center": {
+      "description": "ZooRoute - 公网调度/路由编排/故障事件分析/A-B对照组（仓库未在本地 workspace）",
+      "repoPath": "",
+      "a1AppName": "qt-scheduler-center",
+      "environments": {
+        "prod": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-生产-调度中心日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-nfv-recovering-center",
+                "logstore": "qt-schedule-center-prod"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        },
+        "pre": {
+          "platforms": [
+            {
+              "type": "sls",
+              "name": "SLS杭州-预发-调度中心日志",
+              "enabled": true,
+              "config": {
+                "endpoint": "cn-hangzhou.log.aliyuncs.com",
+                "project": "qt-nfv-recovering-center",
+                "logstore": "qt-schedule-center-pre"
+              }
+            }
+          ],
+          "queryDefaults": {
+            "timeRange": "15m",
+            "maxResults": 100,
+            "sortOrder": "desc"
+          }
+        }
+      }
+    }
+  }
+}
